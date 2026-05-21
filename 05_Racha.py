@@ -138,18 +138,17 @@ with tab1:
     * **Real Madrid (RM):** Muy difícil. Probabilidad: **20%** ($P_{RM}=0.20$).
     * **Sacachispas (SAC):** Más accesible. Probabilidad: **75%** ($P_{SAC}=0.75$).
     
-    Debes elegir una de estas dos secuencias de partidos:
-    1.  **RM - SAC - RM** (Jugar dos veces contra el difícil)
-    2.  **SAC - RM - SAC** (Jugar dos veces contra el fácil)
-    
-    **¿Qué secuencia elegirías para maximizar tus chances de obtener el premio?**
+    **¿Qué secuencia elegirías para maximizar tus chances de obtener el premio?** ¡Elegí mentalmente una de las opciones y luego pasá a la pestaña de **📊 La Simulación** para poner a prueba tu intuición!
     """)
     
-    col1, col2 = st.columns(2)
-    with col1:
-        st.info("**Opción A:** RM ➡️ SAC ➡️ RM")
-    with col2:
-        st.success("**Opción B:** SAC ➡️ RM ➡️ SAC")
+    # Recuadro único, más pequeño y centrado para evitar parecer botones
+    col_vacia1, col_opciones, col_vacia2 = st.columns([1, 2, 1])
+    with col_opciones:
+        st.info("""
+        **Opción A:** RM ➡️ SAC ➡️ RM
+        
+        **Opción B:** SAC ➡️ RM ➡️ SAC
+        """)
 
 # --- TAB 2: LA SIMULACIÓN ---
 with tab2:
