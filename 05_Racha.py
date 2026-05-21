@@ -17,12 +17,13 @@ st.markdown("""
     <style>
     .main { background-color: #f8fafc; }
     
-    /* Resaltar las pestañas de Streamlit */
+    /* Resaltar y CENTRAR las pestañas de Streamlit */
     .stTabs [data-baseweb="tab-list"] {
         gap: 10px;
         background-color: #e2e8f0;
         padding: 10px;
         border-radius: 10px;
+        justify-content: center; /* Centra las pestañas horizontalmente */
     }
     .stTabs [data-baseweb="tab"] {
         background-color: white;
@@ -77,7 +78,7 @@ with col_titulo:
     st.title("⚽ La Paradoja de la Racha")
 st.write("---")
 
-# --- PESTAÑAS (Con nuevos nombres) ---
+# --- PESTAÑAS (Centradas desde el CSS) ---
 tab1, tab2, tab3 = st.tabs(["🤔 El Dilema", "📊 La Simulación", "🧠 La Explicación"])
 
 # --- TAB 1: EL DILEMA ---
@@ -137,7 +138,6 @@ with tab2:
             
             # Simular RM - SAC - RM
             res_a = [random.random() < prob_rm, random.random() < prob_sac, random.random() < prob_rm]
-            # Éxito si hay una racha de 2: GGP o PGG o GGG
             if res_a[1] and (res_a[0] or res_a[2]):
                 st.session_state.exitos_RM_SAC_RM += 1
                 
@@ -156,13 +156,12 @@ with tab2:
         ax.set_ylabel("Cantidad de premios obtenidos")
         ax.set_title(f"Resultados tras {st.session_state.total_series} series")
         
-        # Añadir etiquetas de valor sobre las barras
         for i, v in enumerate(valores):
             ax.text(i, v + (max(valores)*0.02), str(v), ha='center', fontweight='bold')
             
         st.pyplot(fig)
         
-        st.info(f"💡 Llevamos {st.session_state.total_series} series. Sorprendentemente, jugar dos veces contra el Real Madrid suele dar mejores resultados. ¿Por qué?")
+        st.info(f"💡 Llevamos {st.session_state.total_series} series. Jugar dos veces contra el Real Madrid suele dar mejores resultados.")
 
 # --- TAB 3: LA EXPLICACIÓN ---
 with tab3:
@@ -175,7 +174,6 @@ with tab3:
     Existen solo tres combinaciones que garantizan el premio (siendo G=Ganar y P=Perder):
     """)
     
-    # Lista de combinaciones exitosas
     cols_exito = st.columns(3)
     for idx, combo in enumerate(["G - G - P", "P - G - G", "G - G - G"]):
         with cols_exito[idx]:
@@ -196,7 +194,6 @@ with tab3:
     
     with col_mat_a:
         st.markdown("#### Secuencia A: RM ➡️ SAC ➡️ RM")
-        # Reproducimos la tabla de tu imagen en un DataFrame
         data_a = {
             'Combinación': ['GGG', 'GGP', 'PGG'],
             'P1 (RM)': ['0.20', '0.20', '0.80'],
@@ -210,7 +207,6 @@ with tab3:
 
     with col_mat_b:
         st.markdown("#### Secuencia B: SAC ➡️ RM ➡️ SAC")
-        # Creamos la tabla análoga para la Secuencia B
         data_b = {
             'Combinación': ['GGG', 'GGP', 'PGG'],
             'P1 (SAC)': ['0.75', '0.75', '0.25'],
@@ -220,7 +216,6 @@ with tab3:
         }
         df_b = pd.DataFrame(data_b)
         st.dataframe(df_b, use_container_width=True)
-        # Suma: 0.1125 + 0.0375 + 0.0375 = 0.1875
         st.metric("Probabilidad Total de Premio (Opción B)", "18.75%")
 
     st.write("---")
@@ -235,5 +230,4 @@ with tab3:
 st.write("---")
 col_vacia1, col_boton_regreso, col_vacia2 = st.columns([1, 1, 1])
 with col_boton_regreso:
-    # URL placeholder del hub principal, reemplazala por tu URL final si cambió
     st.markdown('<a href="https://future-day-2026-hub.streamlit.app/" target="_blank" class="btn-nav">🔙 Volver al Hub Principal</a>', unsafe_allow_html=True)
