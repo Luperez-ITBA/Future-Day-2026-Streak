@@ -17,6 +17,21 @@ st.markdown("""
     <style>
     .main { background-color: #f8fafc; }
     
+    /* Recuadro celeste de contexto */
+    .context-box {
+        background-color: #e2e8f0;
+        border-radius: 15px;
+        border-left: 10px solid #0074D9;
+        padding: 25px;
+        margin-bottom: 25px;
+    }
+    .context-box p {
+        font-size: 20px !important;
+        line-height: 1.6;
+        color: #1e293b;
+        margin: 0;
+    }
+    
     /* Resaltar y CENTRAR las pestañas de Streamlit */
     .stTabs [data-baseweb="tab-list"] {
         gap: 10px;
@@ -64,6 +79,27 @@ st.markdown("""
     .btn-nav:hover {
         background-color: #0074D9;
     }
+
+    /* --- PARCHE RESPONSIVO PARA CELULARES --- */
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 26px !important;
+        }
+        h3 {
+            font-size: 16px !important;
+        }
+        .context-box {
+            padding: 15px !important;
+            text-align: center !important;
+        }
+        .context-box p {
+            font-size: 16px !important;
+        }
+        .stTabs [data-baseweb="tab-list"] {
+            flex-wrap: wrap;
+            justify-content: center !important;
+        }
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -77,6 +113,17 @@ with col_logo:
 with col_titulo:
     st.title("⚽ La Paradoja de la Racha")
 st.write("---")
+
+# --- RECUADRO DE CONTEXTO (CELESTE Y RESPONSIVO) ---
+st.markdown("""
+    <div class="context-box">
+        <p>
+            No siempre las probabilidades son <b><i>uniformes</i></b> como cuando tiramos un dado o una moneda al azar. 
+            Si nuestro equipo juega la final de la Champions League contra el Real Madrid, por ejemplo, 
+            lamentablemente será más probable la derrota que la victoria.
+        </p>
+    </div>
+""", unsafe_allow_html=True)
 
 # --- PESTAÑAS (Centradas desde el CSS) ---
 tab1, tab2, tab3 = st.tabs(["🤔 El Dilema", "📊 La Simulación", "🧠 La Explicación"])
@@ -146,13 +193,11 @@ with tab2:
             if res_b[1] and (res_b[0] or res_b[2]):
                 st.session_state.exitos_SAC_RM_SAC += 1
 
-    # Gráfico (AHORA RESPONSIVO Y MÁS CHICO)
+    # Gráfico (Responsivo y centrado)
     if st.session_state.total_series > 0:
-        # Usamos columnas para limitar el ancho del gráfico en PC
         col_graf_vacia1, col_grafico, col_graf_vacia2 = st.columns([1, 2, 1])
         
         with col_grafico:
-            # Achicamos un poco el figsize base (de 8,4 a 6,4) para mejor proporción
             fig, ax = plt.subplots(figsize=(6, 4))
             etiquetas = ['RM-SAC-RM', 'SAC-RM-SAC']
             valores = [st.session_state.exitos_RM_SAC_RM, st.session_state.exitos_SAC_RM_SAC]
@@ -161,11 +206,9 @@ with tab2:
             ax.set_ylabel("Cantidad de premios obtenidos")
             ax.set_title(f"Resultados tras {st.session_state.total_series} series")
             
-            # Etiquetas de valores sobre las barras
             for i, v in enumerate(valores):
                 ax.text(i, v + (max(valores)*0.02 if max(valores) > 0 else 0.1), str(v), ha='center', fontweight='bold')
                 
-            # use_container_width=True es la magia que lo hace responsivo al zoom/ventana
             st.pyplot(fig, use_container_width=True)
             
         st.info(f"💡 Llevamos {st.session_state.total_series} series. Sorprendentemente, jugar dos veces contra el Real Madrid suele dar mejores resultados.")
