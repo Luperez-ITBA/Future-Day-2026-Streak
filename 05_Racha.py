@@ -244,7 +244,7 @@ with tab3:
     Observá que en los tres casos exitosos, **el segundo partido debe ganarse obligatoriamente**. 
     Si perdés el partido del medio, es imposible tener una racha de 2.
     
-    Vamos a calcular las probabilidades para cada secuencia, usando los datos de tu imagen:
+    Vamos a calcular las probabilidades para cada secuencia, usando las probabilidades que mencionamos:
     * $P(G_{RM}) = 0.20$ | $P(P_{RM}) = 0.80$
     * $P(G_{SAC}) = 0.75$ | $P(P_{SAC}) = 0.25$
     """)
