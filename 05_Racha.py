@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Configuración de la página
-st.set_page_config(page_title="La Paradoja de la Racha - ITBA", layout="wide")
+st.set_page_config(page_title="La Paradoja de la Racha - ITBA", layout="wide", initial_sidebar_state="collapsed")
 
 # --- MEMORIA (Session State) ---
 if 'exitos_RM_SAC_RM' not in st.session_state:
@@ -12,25 +12,73 @@ if 'exitos_RM_SAC_RM' not in st.session_state:
     st.session_state.exitos_SAC_RM_SAC = 0
     st.session_state.total_series = 0
 
-# --- BARRA LATERAL ---
-with st.sidebar:
-    try:
-        st.image('logo_itba.png', use_container_width=True)
-    except:
-        st.write("ITBA - Future Day")
+# --- ESTILOS CSS ---
+st.markdown("""
+    <style>
+    .main { background-color: #f8fafc; }
     
-    st.header("Controles")
-    if st.button("🗑️ Reiniciar Simulación"):
-        st.session_state.exitos_RM_SAC_RM = 0
-        st.session_state.exitos_SAC_RM_SAC = 0
-        st.session_state.total_series = 0
-        st.rerun()
+    /* Resaltar las pestañas de Streamlit */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 10px;
+        background-color: #e2e8f0;
+        padding: 10px;
+        border-radius: 10px;
+    }
+    .stTabs [data-baseweb="tab"] {
+        background-color: white;
+        border-radius: 5px;
+        padding: 10px 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        border: 1px solid transparent;
+    }
+    .stTabs [aria-selected="true"] {
+        background-color: #0074D9;
+        border: 1px solid #001f3f;
+    }
+    .stTabs [aria-selected="true"] p {
+        color: white !important;
+        font-weight: bold;
+    }
 
-# --- CUERPO PRINCIPAL ---
-st.title("⚽ La Paradoja de la Racha")
+    /* Botón de retorno al Hub */
+    .btn-nav {
+        display: block;
+        width: 100%;
+        padding: 12px 0;
+        background-color: #001f3f;
+        color: #ffffff !important;
+        text-align: center;
+        border-radius: 10px;
+        text-decoration: none !important;
+        font-weight: 600;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-top: 30px;
+    }
+    .btn-nav:hover, .btn-nav:visited, .btn-nav:active {
+        text-decoration: none !important;
+        color: white !important;
+    }
+    .btn-nav:hover {
+        background-color: #0074D9;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# --- CABECERA ---
+col_logo, col_titulo = st.columns([1, 4])
+with col_logo:
+    try:
+        st.image('logo_itba.png', width=150)
+    except:
+        st.write("### ITBA")
+with col_titulo:
+    st.title("⚽ La Paradoja de la Racha")
 st.write("---")
 
-tab1, tab2, tab3 = st.tabs(["🤔 El Dilema", "📊 Simulación", "🧠 Explicación Académica"])
+# --- PESTAÑAS (Con nuevos nombres) ---
+tab1, tab2, tab3 = st.tabs(["🤔 El Dilema", "📊 La Simulación", "🧠 La Explicación"])
 
 # --- TAB 1: EL DILEMA ---
 with tab1:
@@ -55,16 +103,36 @@ with tab1:
     with col2:
         st.success("**Opción B:** SAC ➡️ RM ➡️ SAC")
 
-# --- TAB 2: SIMULACIÓN ---
+# --- TAB 2: LA SIMULACIÓN ---
 with tab2:
     st.subheader("Simulación de Series")
     st.write("Simulemos series de 3 partidos para ver cuál estrategia gana más veces en el largo plazo.")
     
-    if st.button("🏃 Simular 10 series de cada tipo"):
+    # Controles de simulación distribuidos en columnas
+    col_btn1, col_btn2, col_btn3 = st.columns(3)
+    
+    simular_10 = col_btn1.button("🏃 Simular 10 series")
+    simular_100 = col_btn2.button("🏃 Simular 100 series")
+    reiniciar = col_btn3.button("🗑️ Reiniciar Simulación")
+    
+    # Lógica de los botones
+    if reiniciar:
+        st.session_state.exitos_RM_SAC_RM = 0
+        st.session_state.exitos_SAC_RM_SAC = 0
+        st.session_state.total_series = 0
+        st.rerun()
+        
+    series_a_simular = 0
+    if simular_10:
+        series_a_simular = 10
+    elif simular_100:
+        series_a_simular = 100
+        
+    if series_a_simular > 0:
         prob_rm = 0.20
         prob_sac = 0.75
         
-        for _ in range(10):
+        for _ in range(series_a_simular):
             st.session_state.total_series += 1
             
             # Simular RM - SAC - RM
@@ -90,13 +158,13 @@ with tab2:
         
         # Añadir etiquetas de valor sobre las barras
         for i, v in enumerate(valores):
-            ax.text(i, v + 0.1, str(v), ha='center', fontweight='bold')
+            ax.text(i, v + (max(valores)*0.02), str(v), ha='center', fontweight='bold')
             
         st.pyplot(fig)
         
         st.info(f"💡 Llevamos {st.session_state.total_series} series. Sorprendentemente, jugar dos veces contra el Real Madrid suele dar mejores resultados. ¿Por qué?")
 
-# --- TAB 3: EXPLICACIÓN ---
+# --- TAB 3: LA EXPLICACIÓN ---
 with tab3:
     st.subheader("🎓 El Veredicto Matemático")
     st.markdown("""
@@ -162,3 +230,10 @@ with tab3:
     estás forzando a tu equipo a superar el obstáculo más difícil (ganarle al Real Madrid) en el partido del medio. 
     En cambio, con **RM-SAC-RM**, el obstáculo central es contra Sacachispas, lo cual es mucho más probable de superar.
     """)
+
+# --- BOTÓN DE RETORNO AL HUB ---
+st.write("---")
+col_vacia1, col_boton_regreso, col_vacia2 = st.columns([1, 1, 1])
+with col_boton_regreso:
+    # URL placeholder del hub principal, reemplazala por tu URL final si cambió
+    st.markdown('<a href="https://future-day-2026-hub.streamlit.app/" target="_blank" class="btn-nav">🔙 Volver al Hub Principal</a>', unsafe_allow_html=True)
