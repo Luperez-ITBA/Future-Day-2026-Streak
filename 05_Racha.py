@@ -138,7 +138,7 @@ with tab1:
     * **Real Madrid (RM):** Muy difícil. Probabilidad: **20%** ($P_{RM}=0.20$).
     * **Sacachispas (SAC):** Más accesible. Probabilidad: **75%** ($P_{SAC}=0.75$).
     
-    **¿Qué secuencia elegirías para maximizar tus chances de obtener el premio?** ¡Elegí mentalmente una de las opciones y luego pasá a la pestaña de **📊 La Simulación** para poner a prueba tu intuición!
+    **¿Qué secuencia elegirías para maximizar tus chances de obtener el premio?** ¡Pasá a la pestaña de **📊 La Simulación** para poner a prueba tu intuición!
     """)
     
     # Recuadro único, más pequeño y centrado para evitar parecer botones
