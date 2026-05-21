@@ -146,22 +146,29 @@ with tab2:
             if res_b[1] and (res_b[0] or res_b[2]):
                 st.session_state.exitos_SAC_RM_SAC += 1
 
-    # Gráfico
+    # Gráfico (AHORA RESPONSIVO Y MÁS CHICO)
     if st.session_state.total_series > 0:
-        fig, ax = plt.subplots(figsize=(8, 4))
-        etiquetas = ['RM-SAC-RM', 'SAC-RM-SAC']
-        valores = [st.session_state.exitos_RM_SAC_RM, st.session_state.exitos_SAC_RM_SAC]
+        # Usamos columnas para limitar el ancho del gráfico en PC
+        col_graf_vacia1, col_grafico, col_graf_vacia2 = st.columns([1, 2, 1])
         
-        ax.bar(etiquetas, valores, color=['#3498db', '#e67e22'])
-        ax.set_ylabel("Cantidad de premios obtenidos")
-        ax.set_title(f"Resultados tras {st.session_state.total_series} series")
-        
-        for i, v in enumerate(valores):
-            ax.text(i, v + (max(valores)*0.02), str(v), ha='center', fontweight='bold')
+        with col_grafico:
+            # Achicamos un poco el figsize base (de 8,4 a 6,4) para mejor proporción
+            fig, ax = plt.subplots(figsize=(6, 4))
+            etiquetas = ['RM-SAC-RM', 'SAC-RM-SAC']
+            valores = [st.session_state.exitos_RM_SAC_RM, st.session_state.exitos_SAC_RM_SAC]
             
-        st.pyplot(fig)
-        
-        st.info(f"💡 Llevamos {st.session_state.total_series} series. Jugar dos veces contra el Real Madrid suele dar mejores resultados.")
+            ax.bar(etiquetas, valores, color=['#3498db', '#e67e22'])
+            ax.set_ylabel("Cantidad de premios obtenidos")
+            ax.set_title(f"Resultados tras {st.session_state.total_series} series")
+            
+            # Etiquetas de valores sobre las barras
+            for i, v in enumerate(valores):
+                ax.text(i, v + (max(valores)*0.02 if max(valores) > 0 else 0.1), str(v), ha='center', fontweight='bold')
+                
+            # use_container_width=True es la magia que lo hace responsivo al zoom/ventana
+            st.pyplot(fig, use_container_width=True)
+            
+        st.info(f"💡 Llevamos {st.session_state.total_series} series. Sorprendentemente, jugar dos veces contra el Real Madrid suele dar mejores resultados.")
 
 # --- TAB 3: LA EXPLICACIÓN ---
 with tab3:
