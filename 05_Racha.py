@@ -138,7 +138,7 @@ with tab1:
     * **Real Madrid (RM):** Muy difícil. Probabilidad: **20%** ($P_{RM}=0.20$).
     * **Sacachispas (SAC):** Más accesible. Probabilidad: **75%** ($P_{SAC}=0.75$).
     
-    **¿Qué secuencia elegirías para maximizar tus chances de obtener el premio?** ¡Pasá a la pestaña de **📊 La Simulación** para poner a prueba tu intuición!
+    **¿Qué secuencia elegirías para maximizar tus chances de obtener el premio?** ¡Elegí mentalmente una de las opciones y luego pasá a la pestaña de **📊 La Simulación** para poner a prueba tu intuición!
     """)
     
     # Recuadro único, más pequeño y centrado para evitar parecer botones
@@ -192,21 +192,32 @@ with tab2:
             if res_b[1] and (res_b[0] or res_b[2]):
                 st.session_state.exitos_SAC_RM_SAC += 1
 
-    # Gráfico (Responsivo y centrado)
+    # Gráfico (Responsivo, centrado y en porcentajes)
     if st.session_state.total_series > 0:
         col_graf_vacia1, col_grafico, col_graf_vacia2 = st.columns([1, 2, 1])
         
         with col_grafico:
             fig, ax = plt.subplots(figsize=(6, 4))
             etiquetas = ['RM-SAC-RM', 'SAC-RM-SAC']
-            valores = [st.session_state.exitos_RM_SAC_RM, st.session_state.exitos_SAC_RM_SAC]
+            
+            # Cálculo de porcentajes
+            total = st.session_state.total_series
+            pct_a = (st.session_state.exitos_RM_SAC_RM / total) * 100
+            pct_b = (st.session_state.exitos_SAC_RM_SAC / total) * 100
+            valores = [pct_a, pct_b]
             
             ax.bar(etiquetas, valores, color=['#3498db', '#e67e22'])
-            ax.set_ylabel("Cantidad de premios obtenidos")
-            ax.set_title(f"Resultados tras {st.session_state.total_series} series")
+            ax.set_ylabel("Porcentaje de éxito (%)")
+            # Título actualizado según tu pedido
+            ax.set_title(f"% de resultados positivos con cada opción tras {total} series")
             
+            # Asegurar que el eje Y tenga espacio para el texto arriba de las barras
+            margen_y = max(valores) * 0.15 if max(valores) > 0 else 10
+            ax.set_ylim(0, max(valores) + margen_y)
+            
+            # Etiquetas con formato de porcentaje (1 decimal)
             for i, v in enumerate(valores):
-                ax.text(i, v + (max(valores)*0.02 if max(valores) > 0 else 0.1), str(v), ha='center', fontweight='bold')
+                ax.text(i, v + (margen_y * 0.2), f"{v:.1f}%", ha='center', fontweight='bold')
                 
             st.pyplot(fig, use_container_width=True)
             
