@@ -134,7 +134,7 @@ with tab1:
     st.markdown("""
     Tu equipo recibirá un premio si logra ganar **al menos dos partidos consecutivos** en una serie de 3.
     
-    Tienes dos rivales posibles con estas probabilidades de victoria:
+    Tenés dos rivales posibles con estas probabilidades de victoria:
     * **Real Madrid (RM):** Muy difícil. Probabilidad: **20%** ($P_{RM}=0.20$).
     * **Sacachispas (SAC):** Más accesible. Probabilidad: **75%** ($P_{SAC}=0.75$).
     
